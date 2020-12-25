@@ -1,0 +1,13 @@
+function genArr(len, range) {
+    const arr = [];
+    while(arr.length < len) {
+        const num = Math.floor(Math.random() * range) + 1;
+        if(!arr.includes(num)) {
+           arr.push(num);
+        }
+        
+    }
+    return arr;
+}
+
+console.log("random arr", genArr(2, 12))

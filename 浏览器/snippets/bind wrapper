@@ -1,0 +1,19 @@
+Function.prototype._bind = function() {
+    if(typeof this !== 'function') {
+        throw new TypeError('Function.prototype.bind- what is trying to be bound is not callable');
+    }
+    const [context, ...args] = [...arguments];
+    const fnToBind = this;
+    function fNOP() {}
+
+    function fBound() {
+        return fnToBind.apply(fNOP.prototype.isPrototypeOf(this) ? this : context, [...args, ...arguments])
+    }
+
+    if(this.prototype) {
+        fNOP.prototype = this.prototype;
+    }
+
+    fBound.prototype = new fNOP();
+    return fBound;
+}

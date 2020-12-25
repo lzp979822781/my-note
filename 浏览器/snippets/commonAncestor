@@ -1,0 +1,17 @@
+// 最近公共祖先
+var lowestCommonAncestor = function(root, p, q) {
+    //没有左右子树情况
+   if(root == null || root == p || root == q){
+       return root
+   }
+    //递归获取左右子树
+    var left = lowestCommonAncestor(root.left,p,q)
+    var right = lowestCommonAncestor(root.right,p,q)
+    
+    //左右子树都不为空，则返回根节点
+    if(left != null && right != null){
+        return root
+    }
+    //左右子树其中一个不为空，则返回回相应子树的查找结果
+    return left != null ? left : right
+};

@@ -1,0 +1,33 @@
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var isValid = function(s) {
+    const n = s.length;
+    if(n % 2 === 1) {
+        return false;
+    }
+
+    const map = new Map([
+        [')', '('],
+        ['}', '{'],
+        [']', '[']
+    ])
+    const stack = [];
+    const arr = s.split('');
+    for(let i = 0; i < arr.length; i++) {
+        const ch = arr[i];
+        if(map.has(ch)) {
+            if(!stack.length || stack[stack.length - 1] !== map.get(ch)) {
+                return false;
+            }
+            stack.pop();
+        } else {
+            stack.push(ch)
+        }
+    }
+
+    return !stack.length;
+};
+
+console.log(isValid("([}}])"))

@@ -1,0 +1,18 @@
+var minArray = function(numbers) {
+    var left = 0;
+    var right = numbers.length - 1;
+    var mid;
+    while(left < right) {
+        mid = left + Math.floor((right - left) / 2);
+        if(numbers[mid] > numbers[right]) {
+            left += 1;
+        } else {
+            right = mid;
+        }
+    }
+
+    return numbers[right];
+
+};
+
+console.log(minArray([3,4,5,1,2]))

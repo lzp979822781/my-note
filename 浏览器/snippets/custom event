@@ -1,0 +1,21 @@
+function customEvent(type) {
+    const _originEvent = history[type];
+    return function() {
+        let res;
+        if(_originEvent) {
+            res = _originEvent.apply(this, arguments);
+        }
+
+        let e = new Event(type);
+        e.arguments = arguments;
+        window.dispatchEvent(e);
+        return res;
+    }
+}
+
+history.pushState = customEvent('pushState');
+window.addEventListener('pushState', function(){
+    console.log('pushState触发', arguments);
+})
+
+history.pushState({}, null, 'www.baidu.com');

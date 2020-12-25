@@ -1,0 +1,16 @@
+function flatten1(arr) {
+
+    return arr.reduce((prev, next) => prev.concat(Array.isArray(next) ? flatten(next) : next), []);
+}
+
+console.log(flatten3([1, [2, [3]]]))
+
+function flatten2(arr) { return arr.flat(Infinity)}
+
+function flatten3(arr) {
+    var result = [];
+    arr.forEach(item => {
+        result = result.concat(Array.isArray(item) ? flatten3(item) : item)
+    })
+    return result;
+}

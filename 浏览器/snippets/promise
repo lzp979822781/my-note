@@ -1,0 +1,133 @@
+class PromiseM {
+    constructor(process) {
+        this.status = 'pending';
+        this.value = '';
+        this.reason = undefined;
+        this.onFulfilled = [];
+        this.onRejected = [];
+        try{
+            process(this.resolve, this.reject);
+        }catch(e) {
+            this.reject(e)
+        }
+
+    }
+
+    resolve = msg => {
+        this.status = 'fulfilled';
+        this.value = msg;
+        this.onFulfilled.forEach(fn => fn())
+    }
+
+    reject = error => {
+        this.status = 'rejected';
+        this.reason = error;
+        this.onRejected.forEach(fn => fn())
+    }
+
+    then = (onFulfill, onReject) => {
+        const that = this;
+        const onFulfilled = typeof onFulfill === 'function' ? onFulfill : value => value;
+        const onRejected = typeof onReject === 'function' ? onReject : reason => { throw reason}
+        
+        let promise2 = new PromiseM((resolve, reject) => {
+            if(this.status === 'fulfilled') {
+                setTimeout(() => {
+                    try{
+                        let x = onFulfilled(that.value);
+                        that.execute(promise2, x ,resolve, reject)
+                    }catch(e) {
+                        reject(e)
+                    }
+                })
+            } else if(this.status === 'rejected') {
+                setTimeout(() => {
+                    try{
+                        let x = onRejected(that.reason);
+                        that.execute(promise2, x ,resolve, reject)
+                    }catch(e) {
+                        reject(e)
+                    }
+                })
+
+            } else if(this.status === 'pending') {
+                that.onFulfilled.push(() => {
+                    setTimeout(() => {
+                        try{
+                            let x = onFulfilled(that.value);
+                            that.execute(promise2, x ,resolve, reject)
+                        }catch(e) {
+                            reject(e)
+                        }
+                    })
+                })
+
+                that.onRejected.push(() => {
+                    setTimeout(() => {
+                        try{
+                            let x = onRejected(that.reason);
+                            that.execute(promise2, x ,resolve, reject)
+                        }catch(e) {
+                            reject(e)
+                        }
+                    })
+                })
+            }
+        }) 
+        return promise2;
+    }
+
+    execute = (promise2, x, resolve, reject) => {
+        let that = this;
+       if(promise2 === x) {
+           reject(new TypeError('Chaining cycle'));
+       }
+       
+       if(x && typeof x === 'object' || typeof x === 'function' ) {
+           let used;
+           try{
+              let then = x.then;
+              if(typeof then === 'function') {
+                 then.call(x, (y) => {
+                      if(used) { return }
+                      used = true;
+                      that.execute(promise2, y, resolve, reject)
+                  }, r => {
+                      if(used) { return }
+                      used = true;
+                      reject(r);
+                  })
+              } else {
+                if(used) {
+                    return
+                }
+                used = true;
+                resolve(x)
+              }
+              
+           }catch(e) {
+              if(used) { return }
+              used = true;
+              reject(e) 
+           }
+       } else {
+           resolve(x) 
+       }
+    }
+
+    catch = (failFn) => {
+        failFn(this.msg)
+    }
+}
+
+
+var mm=new PromiseM(function(resolve,reject){
+    resolve('123');
+});
+mm.then(function(success){
+    console.log(success);
+},function(){
+    console.log('fail!');
+}).then(data => {
+    console.log("data", data);
+});

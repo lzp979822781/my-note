@@ -1,0 +1,12 @@
+let _deps;
+
+
+function useEffect(callback, depArray) {
+    const hasNoDep = !depArray;
+    const hasChangedDeps = _deps ? !depArray.every((el, i) => el === depArray[i]) : true;
+    if(hasNoDep || hasChangedDeps) {
+        callback();
+        _deps = depArray;
+    }
+
+}

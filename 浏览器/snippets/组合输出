@@ -1,0 +1,35 @@
+// [‘a’,‘b’],[‘A’,‘B’],[‘1’,‘0’]，输出[‘aA1’,‘aA0’,‘aB1’,‘aB0’,‘bA1’,‘bA0’,‘bB1’,‘bB0’]，算法的排列组合问题
+
+function findAll(arr) {
+    return arr.reduce((total, current) => {
+        return getResult(total, current);
+    }, [])
+}
+
+function getResult(arrA, arrB) {
+    if(!Array.isArray(arrA) || !Array.isArray(arrB)) {
+        return [];
+    }
+
+    if(!arrA.length) {
+        return arrB;
+    }
+
+    if(!arrB.length) {
+        return arrA;
+    }
+
+    const result = [];
+
+    for(let i = 0; i < arrA.length; i++) {
+        for(let j = 0; j < arrB.length; j++){
+            result.push(`${arrA[i]}${arrB[j]}`);
+        }
+    }
+
+    return result;
+}
+
+var testArr = [ ['a','b'],['A', 'B'], ['1', '0'] ];
+
+console.log("result", findAll(testArr));

@@ -1,0 +1,112 @@
+function genArr(len) {
+    const arr = [];
+    for(let i=0; i < len - 1; i++) {
+        arr.push(Math.floor(Math.random() * (len + 1)));
+    }
+    return arr;
+}
+
+function insertSort(arr) {
+    const isArray = Array.isArray(arr);
+    if(!isArray || (isArray && arr.length < 2)) {
+        return arr;
+    }
+
+    for(let outer = 1, len = arr.length; outer < len; outer++){
+        // 缓存当前要排序的值, 空出当前位置
+        const temp = arr[outer];
+        // 当前元素与前面的元素逐个比较,因为要与前个元素比较，所以最低移动到索引为1的位置
+        let inner = outer;
+        while(inner > 0 && arr[inner - 1] >= temp) {
+            arr[inner] = arr[inner - 1];
+            inner--;
+        }
+
+        arr[inner] = temp;
+    }
+
+    return arr;
+}
+
+// 对元素逐渐缩小分组
+function shellSort(arr) {
+    const isArray = Array.isArray(arr);
+    if(!isArray || (isArray && arr.length < 2)) {
+        return arr;
+    }
+    
+    const length = arr.length;
+
+    for(let gap = Math.floor(length / 2); gap >0; gap = Math.floor(gap / 2)) {
+        for(let i = gap; i < length; i++) {
+            let j = i;
+            while(j-gap >= 0 && arr[j] < arr[j-gap]) {
+                [arr[j], arr[j-gap]] = [arr[j-gap], arr[j]];
+                j -= gap;
+            }
+        }
+    }
+
+    return arr;
+
+}
+
+function mergeSort(arr) {
+    if(!Array.isArray(arr) || (Array.isArray(arr) && arr.length < 2)) {
+        return arr;
+    }
+
+    const middle = Math.floor(arr.length / 2);
+    const left = arr.slice(0, middle);
+    const right = arr.slice(middle);
+    return merge(mergeSort(left), mergeSort(right));
+}
+
+function merge(left, right) {
+    const res = [];
+    while(left.length && right.length) {
+        if(left[0] < right[0]) {
+            res.push(left.shift());
+        } else {
+            res.push(right.shift());
+        }
+    }
+
+    if(left.length) {
+        res.push(...left);
+    }
+
+    if(right.length) {
+        res.push(...right);
+    }
+
+    return res;
+}
+
+function quickSort(arr) {
+    if(!Array.isArray(arr) || (Array.isArray(arr) && arr.length < 2)) {
+        return arr;
+    }
+
+    const leftArr = [];
+    const rightArr = [];
+    const pivot = arr[0];
+    for(let i = 1, len = arr.length; i < len; i++) {
+        const temp = arr[i];
+        if(arr[i] < pivot) {
+            leftArr.push(temp);
+        } else {
+            rightArr.push(temp);
+        }
+    }
+
+    return quickSort(leftArr).concat(pivot, quickSort(rightArr));
+}
+
+function test() {
+    const primitiveArr = genArr(20);
+    console.log("primitive arr", primitiveArr);
+    console.log("sorted arr", quickSort(primitiveArr))
+}
+
+test();

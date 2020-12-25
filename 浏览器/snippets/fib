@@ -1,0 +1,18 @@
+function fib(n) {
+    let last = 1;
+    let nextLast = 1;
+    let result = 1;
+    if(n < 3) {
+        return 1;
+    }
+
+    for(let i=3; i <=n; i++) {
+        result = last + nextLast;
+        nextLast = last;
+        last = result;
+    }
+
+    return result;
+}
+
+console.log(fib(6))

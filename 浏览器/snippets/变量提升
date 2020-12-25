@@ -1,0 +1,13 @@
+
+console.log(fish1,fish2,fish3);//un func un
+var fish1 = function(){
+  console.log('welcome to Palfish-1')
+}
+function fish2(){
+  console.log('welcome to Palfish-2')
+}
+var fish3 = 'welcome to Palfish-3'
+var fish1,fish2,fish3;
+
+console.log(fish1,fish2,fish3);//  func func string
+var fish4;

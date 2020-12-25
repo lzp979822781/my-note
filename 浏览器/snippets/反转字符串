@@ -1,0 +1,16 @@
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var reverseWords = function(s) {
+    const trimStr = s.trim();
+    console.log("trimStr", trimStr);
+    var str = trimStr.replace(/\s+/g, '-');
+    console.log("str", str);
+    return str.split('-').reverse().join(' ');
+
+};
+
+var testStr = "  hello world!  ";
+
+console.log(reverseWords(testStr));

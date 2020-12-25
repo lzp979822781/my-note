@@ -1,0 +1,70 @@
+function genRandom(length, max) {
+    let arr = [];
+    for(let i = 0; i < length; i++) {
+        arr.push(Math.floor(Math.random() * max) + 1)
+    }
+
+    return arr;
+}
+
+function quickSort(arr) {
+    if(!Array.isArray(arr) || (Array.isArray(arr) && arr.length < 2)) {
+        return arr;
+    }
+
+    let pivot = arr[0];
+    let leftArr = [];
+    let rightArr = [];
+    for(let i = 1, len = arr.length; i < len; i++) {
+        if(arr[i] < pivot) {
+            leftArr.push(arr[i]);
+        } else {
+            rightArr.push(arr[i])
+        }
+    }
+    return quickSort(leftArr).concat(pivot, quickSort(rightArr))
+}
+
+function shellSort(arr) {
+    const length = arr.length;
+    for(let gap = Math.floor(length / 2); gap > 0; gap = Math.floor(gap / 2)) {
+        for(let i = gap; i < length; i++) {
+            let j = i;
+            while(j-gap >= 0 && arr[j] < arr[j-gap]){
+                [arr[j-gap], arr[j]] = [arr[j], arr[j-gap]];
+                j = j - gap;
+            }
+        }
+        
+    }
+
+    return arr;
+}
+
+
+// 插入排序步长固定为1
+function insertSort(arr) {
+    const length = arr.length;
+    for(let i = 1; i < length; i++) {
+        let temp = arr[i];
+        let j = i;
+        while(j>0 && arr[j-1] > temp) {
+            arr[j] = arr[j-1];
+            j--;
+        }
+        arr[j] = temp;
+    }
+
+    return arr;
+}
+
+// 归并排序以中间位置数据将原数组拆分为左右两个数组
+
+
+function main(){
+    const arr = genRandom(10, 100);
+    console.log("primitive arr", arr);
+    console.log("sort arr", insertSort(arr));
+}
+
+main();

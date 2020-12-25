@@ -1,0 +1,8 @@
+function createNew() {
+    const [ _constructor, ...args] = [...arguments];
+    const obj = {};
+    obj.__proto__ = _constructor.prototype;
+    const res = _constructor.apply(obj, args);
+    // 是否返回的是自定义对象
+    return typeof res === 'object' ? res : obj;
+}

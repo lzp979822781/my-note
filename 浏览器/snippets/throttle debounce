@@ -1,0 +1,31 @@
+function throttle(fn, interval) {
+    let flag = true;
+    return function(...args) {
+        if(flag) {
+            flag = false;
+           setTimeout(function(){ 
+                flag = true;
+                fn.apply(null, args);
+
+           }, interval);
+        }
+
+        
+    }
+}
+
+function debounce(fn, interval) {
+    let lastFn = null;
+    return function(){
+        if(lastFn) {
+//             不执行
+            clearTimeout(lastFn);
+        }
+
+        // 重新进行延时
+        lastFn = setTimeout(function(...args){
+            fn.apply(null, args);
+            lastFn = null;
+        }, interval);
+    }
+}

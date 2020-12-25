@@ -1,0 +1,8 @@
+// 插入排序
+function insert(arr) {
+    if(!Array.isArray(arr) || (Array.isArray(arr) && arr.length )) {
+        return arr;
+    }
+
+    
+}

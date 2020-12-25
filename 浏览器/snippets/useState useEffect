@@ -1,0 +1,62 @@
+let cursor = 0;
+let memoizedState = [];
+
+function useState(initValue) {
+    memoizedState[cursor] = memoizedState[cursor] || initValue;
+    const currentCusor = cursor;
+    function setState(newState) {
+        memoizedState[currentCusor] = newState;
+        render();
+    }
+    return [memoizedState[currentCusor++], setState];
+}
+
+function useEffect(callback, depArray) {
+    const hasNoDeps = !depArray;
+    const deps = memoizedState[cursor];
+    const hasChangedDeps = deps ? !depArray.every((el, index) => el === deps[index]) : true;
+    if(hasNoDeps || hasChangedDeps) {
+        callback();
+        memoizedState[cursor] = depArray;
+    }
+    cursor++;
+}
+
+function App() {
+  const [count, setCount] = useState(0);
+  const [username, setUsername] = useState("fan");
+  useEffect(() => {
+    console.log(count);
+  }, [count]);
+  useEffect(() => {
+    console.log(username);
+  }, [username]);
+  return (
+    <div>
+      <div>{count}</div>
+      <Button
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        点击
+      </Button>
+      <div>{username}</div>
+      <Button
+        onClick={() => {
+          setUsername(username + " hello");
+        }}
+      >
+        点击
+      </Button>
+    </div>
+  );
+}
+
+const rootElement = document.getElementById("root");
+
+function render() {
+  cursor = 0;
+  ReactDOM.render(<App />, rootElement);
+}
+render();
